@@ -1,6 +1,6 @@
 # ETC Triangle Centers / ETC 三角形中心
 
-[中文](#zh) · [English](#en) · [复现命令 / Commands](#commands) · 勘误表 / Errata [中文](docs/etc-source-errata.md) · [English](docs/etc-source-errata.en.md)
+[中文](#zh) · [English](#en) · [坐标查询 / Point lookup](#lookup) · [复现命令 / Commands](#commands) · 勘误表 / Errata [中文](docs/etc-source-errata.md) · [English](docs/etc-source-errata.en.md)
 
 <a id="zh"></a>
 
@@ -39,6 +39,29 @@ This repository converts geometry and coordinates from Parts 1–37 of the *Ency
 1. Install the dependencies and run `verify` from the repository root. A fresh clone has the data needed to check dependencies and types. Expect `Valid: 70213 recipes`.
 2. A full reproduction requires the original ETC snapshots `.cache/triangle-centers/sources/ETCPart1.html` through `ETCPart37.html` and the GeoGebra coordinate samples in `.cache/triangle-centers/native/native-atlas.json`. Obtain both separately, since Git ignores the cache. `fetch` downloads the current pages, which may differ from the original snapshots. Export the coordinate samples from `/scripts/geogebra/browser/verification.html?page=center-anchors` on the companion GeoGebra site. The historical samples used version 5.4.920.0.
 3. With those inputs, run `check` to regenerate offline and compare each chunk against the checked-in data. Use `build` to write the chunks. The optional full Python test suite also requires `.cache/triangle-centers/gemini-triangle.html`.
+
+<a id="lookup"></a>
+
+## 坐标查询 / Point lookup
+
+[单文件求值器 / Single-file evaluator](etc_point.py) 只需 SymPy 和 `data/` 中的生成数据。无三角形参数时返回关于边长的齐次重心式。数值有限点的重心权重和为 1，有方向的理想点权重和为 0。
+
+The evaluator uses SymPy and the generated data in `data/`. With no triangle arguments it returns homogeneous expressions in the side lengths. Numeric finite weights sum to one, and ideal directions sum to zero.
+
+```sh
+python etc_point.py 4201
+python etc_point.py 4201 --sides 6 9 13
+python etc_point.py 4201 --vertices 0 0 6 0 1 4 --cartesian
+```
+
+```python
+from etc_point import barycentric, cartesian
+
+weights = barycentric(4201, sides=(6, 9, 13))
+xy = cartesian(4201, ((0, 0), (13, 0), (62/13, 8*35**.5/13)))
+```
+
+普通原生公式来自独立生成表，已审阅的原生修正由分块优先提供。The chunks take precedence over the ordinary native weights for reviewed overrides. [权重表 / Weights](data/native-weights.txt) · [转换工具 / Converter](tools/convert_native_weights.py)
 
 <a id="commands"></a>
 
