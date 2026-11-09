@@ -1,5 +1,7 @@
 # ETC 源数据勘误表
 
+[中文](etc-source-errata.md) · [English](etc-source-errata.en.md) · [仓库说明](../README.md#zh)
+
 依据仓库保存的 ETC 网页快照、导入补丁、人工配方、测试和历次审阅记录整理。编号均指 `X(n)`，`{i,j}` 表示经过 `X(i)`、`X(j)` 的直线。下表记录本地发现和处理结果，官网可能已更新。`seed` 是本库为单个点维护的配方，`SKIP source-error` 表示明确排除该条目。
 
 ## HTML、标题边界和重复条目
